@@ -1,24 +1,75 @@
+// Search.tsx
 import { Container, InputAdornment, TextField } from "@mui/material";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import { useDispatch, useSelector } from "react-redux";
+import { setWeather } from "../../store/slices/weatherSlice.ts";
+import { getLocationsAutocomplete } from "../../api/api.ts";
+import { RootState } from "../../store/store.ts";
+import { List, ListItem, ListItemText } from "@mui/material";
+
+
+interface Location {
+  Key: string;
+  LocalizedName: string;
+}
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [locations, setLocations] = useState<Location[]>([]);
+  const dispatch = useDispatch();
+  const selectedCity = useSelector((state: RootState) => state.weather.cityName);
+  
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-    console.log(event.target.value)
   };
 
+  const handleSelectLocation = (location: Location) => {
+    // Dispatch action to update the selected city in the Redux store
+    dispatch(setWeather({ cityName: location.LocalizedName, currentTemperature: 0 }));
+    // Clear the search term and locations
+    setSearchTerm("");
+    setLocations([]);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Only fetch data if the search term is not empty
+      if (searchTerm.trim() !== "") {
+        try {
+          const data = await getLocationsAutocomplete(searchTerm);
+          setLocations(data);
+        } catch (error) {
+          // Handle error
+          console.error("Error fetching locations:", (error as Error).message);
+        }
+      } else {
+        // Clear locations if the search term is empty
+        setLocations([]);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm]);
+
   return (
-    <Container maxWidth="md" sx={{ mt: 20 }}>
+    <Container
+      maxWidth="md"
+      sx={{
+        py: 10,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <TextField
         id="search"
         type="search"
         label="Search"
         value={searchTerm}
         onChange={handleChange}
-        sx={{ width: 600 }}
+        sx={{ width: "100%", maxWidth: 600 }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -27,6 +78,17 @@ export default function Search() {
           ),
         }}
       />
+      {/* Display the autocomplete results using List and ListItem */}
+      <List>
+        {locations.map((location) => (
+          <ListItem key={location.Key} button onClick={() => handleSelectLocation(location)}>
+            <ListItemText primary={location.LocalizedName} />
+          </ListItem>
+        ))}
+      </List>
     </Container>
   );
 }
+
+
+//change
