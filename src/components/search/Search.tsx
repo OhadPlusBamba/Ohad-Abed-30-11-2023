@@ -1,17 +1,18 @@
 // Search.tsx
-import { Container, InputAdornment, TextField } from "@mui/material";
-import { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
+import { Container, InputAdornment, TextField, List, ListItem, ListItemText } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch, useSelector } from "react-redux";
-import { setWeather } from "../../store/slices/weatherSlice.ts";
-import { getLocationsAutocomplete } from "../../api/api.ts";
-import { RootState } from "../../store/store.ts";
-import { List, ListItem, ListItemText } from "@mui/material";
-
+import { setWeather } from "../../store/slices/weatherSlice";
+import { getLocationsAutocomplete } from "../../api/api";
+import { RootState } from "../../store/store";
 
 interface Location {
   Key: string;
   LocalizedName: string;
+  Country: {
+    LocalizedName: string;
+  };
 }
 
 export default function Search() {
@@ -19,7 +20,6 @@ export default function Search() {
   const [locations, setLocations] = useState<Location[]>([]);
   const dispatch = useDispatch();
   const selectedCity = useSelector((state: RootState) => state.weather.cityName);
-  
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -82,13 +82,12 @@ export default function Search() {
       <List>
         {locations.map((location) => (
           <ListItem key={location.Key} button onClick={() => handleSelectLocation(location)}>
-            <ListItemText primary={location.LocalizedName} />
+            <ListItemText
+              primary={`${location.LocalizedName}, ${location.Country.LocalizedName}`}
+            />
           </ListItem>
         ))}
       </List>
     </Container>
   );
 }
-
-
-//change

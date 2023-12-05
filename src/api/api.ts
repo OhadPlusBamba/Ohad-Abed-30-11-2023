@@ -1,5 +1,5 @@
-// const API_KEY = "4TiECVBU44ynCiG0fnqT2wTFBdEJnTIf";
-const API_KEY = "zIZ39GdLniX9GdtH05VNrGAKSU98l34j"; //secound user api
+//  const API_KEY = "4TiECVBU44ynCiG0fnqT2wTFBdEJnTIf";
+// const API_KEY = "zIZ39GdLniX9GdtH05VNrGAKSU98l34j"; //secound user api
 
 export const getLocationsAutocomplete = async (searchTerm: string) => {
   try {
