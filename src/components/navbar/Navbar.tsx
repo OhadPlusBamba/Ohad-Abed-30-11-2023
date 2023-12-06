@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -6,20 +6,29 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import WeatherLogo from "../../assets/WeatherLogo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentCityUserLookingFor, setTemperatureUnit } from "../../store/slices/weatherSlice";
+import {
+  setCurrentCityUserLookingFor,
+  setTemperatureUnit,
+} from "../../store/slices/weatherSlice";
 import { Typography, Switch } from "@mui/material";
 import { RootState } from "../../store/store";
-import IconButton from "@mui/material/IconButton";
-import Brightness6Icon from "@mui/icons-material/Brightness6";
+import { useTheme } from "@mui/system";
+
+// import IconButton from "@mui/material/IconButton";
+// import Brightness6Icon from "@mui/icons-material/Brightness6";
 
 function Navbar() {
+  const theme = useTheme();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const temperatureUnit = useSelector((state: RootState) => state.weather.temperatureUnit);
+  const temperatureUnit = useSelector(
+    (state: RootState) => state.weather.temperatureUnit
+  );
 
   const handleToggleUnit = () => {
     // Toggle between Celsius and Fahrenheit
-    const newUnit = temperatureUnit === 'C' ? 'F' : 'C';
+    const newUnit = temperatureUnit === "C" ? "F" : "C";
     dispatch(setTemperatureUnit(newUnit));
   };
 
@@ -50,10 +59,13 @@ function Navbar() {
               src={WeatherLogo}
               alt="Logo"
               style={{
-                display: { xs: "none", md: "flex" },
+                display: "flex", // Change to "flex" to ensure the image is initially visible
+                [theme.breakpoints.up("md")]: {
+                  display: "flex",
+                },
                 marginRight: 1,
-                height: "130px",
-                width: "170px",
+                height: "120px",
+                width: "150px",
               }}
             />
             <Typography
@@ -73,15 +85,13 @@ function Navbar() {
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="body1" >
-              °C
-            </Typography>
+            <Typography variant="body1">°C</Typography>
             <Switch
               color="default"
               checked={temperatureUnit === "F"}
               onChange={handleToggleUnit}
             />
-            <Typography variant="body1" sx={{ marginRight: 2.5}}>
+            <Typography variant="body1" sx={{ marginRight: 2.5 }}>
               °F
             </Typography>
             <Button variant="text" color="inherit" onClick={handleHomeClick}>
