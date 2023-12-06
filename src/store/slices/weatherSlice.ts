@@ -40,6 +40,7 @@ interface WeatherState {
   currentConditions: CurrentConditions | null;
   currentCityUserLookingFor: currentCityUserLookingFor;
   favorites: Favorite[]; 
+  temperatureUnit: 'C' | 'F';
 }
 
 const initialState: WeatherState = {
@@ -54,6 +55,7 @@ const initialState: WeatherState = {
   currentConditions: null,
   currentCityUserLookingFor: { id: '', name: '' },
   favorites: [],
+  temperatureUnit: 'F'
 };
 
 const weatherSlice = createSlice({
@@ -92,6 +94,10 @@ const weatherSlice = createSlice({
     setCurrentCityUserLookingFor: (state, action: PayloadAction<{ id: string; name: string }>) => {
       state.currentCityUserLookingFor = action.payload;
     },
+    setTemperatureUnit: (state, action: PayloadAction<'C' | 'F'>) => {
+      state.temperatureUnit = action.payload;
+    },
+  
   },
 });
 
@@ -102,5 +108,6 @@ export const {
   addToFavorites,
   removeFromFavorites,
   setCurrentCityUserLookingFor,
+  setTemperatureUnit ,
 } = weatherSlice.actions;
 export default weatherSlice.reducer;

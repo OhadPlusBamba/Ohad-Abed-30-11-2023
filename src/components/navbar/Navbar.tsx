@@ -5,13 +5,23 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import WeatherLogo from "../../assets/WeatherLogo.png";
-import { useDispatch } from "react-redux";
-import { setCurrentCityUserLookingFor } from "../../store/slices/weatherSlice";
-import { Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentCityUserLookingFor, setTemperatureUnit } from "../../store/slices/weatherSlice";
+import { Typography, Switch } from "@mui/material";
+import { RootState } from "../../store/store";
+import IconButton from "@mui/material/IconButton";
+import Brightness6Icon from "@mui/icons-material/Brightness6";
 
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const temperatureUnit = useSelector((state: RootState) => state.weather.temperatureUnit);
+
+  const handleToggleUnit = () => {
+    // Toggle between Celsius and Fahrenheit
+    const newUnit = temperatureUnit === 'C' ? 'F' : 'C';
+    dispatch(setTemperatureUnit(newUnit));
+  };
 
   const handleHomeClick = () => {
     console.log("handleHomeClick triggered");
@@ -62,7 +72,18 @@ function Navbar() {
               OhadWeather
             </Typography>
           </Box>
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="body1" >
+              °C
+            </Typography>
+            <Switch
+              color="default"
+              checked={temperatureUnit === "F"}
+              onChange={handleToggleUnit}
+            />
+            <Typography variant="body1" sx={{ marginRight: 2.5}}>
+              °F
+            </Typography>
             <Button variant="text" color="inherit" onClick={handleHomeClick}>
               Home
             </Button>

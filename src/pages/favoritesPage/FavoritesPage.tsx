@@ -19,6 +19,8 @@ function FavoritesPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favorites = useSelector((state: RootState) => state.weather.favorites);
+  const temperatureUnit = useSelector((state: RootState) => state.weather.temperatureUnit);
+
 
   const [favoriteData, setFavoriteData] = useState<FavoriteData[]>([]);
 
@@ -54,6 +56,19 @@ function FavoritesPage() {
     fetchDataForFavorites();
   }, [favorites]);
 
+
+  function convertTemperature(temperature?: number): string | 'N/A' {
+    if (temperature === undefined) {
+      return 'N/A';
+    }
+    return temperatureUnit === 'C' ?  `${toCelsius(temperature).toFixed(1)}` : `${temperature.toFixed(1)}`;
+  }
+  
+  function toCelsius(fahrenheit: number): number {
+    return ((fahrenheit - 32) * 5) / 9;
+  }
+  
+
   const handleFavoriteClick = (cityKey: string, cityName: string) => {
     dispatch(setCurrentCityUserLookingFor({ id: cityKey, name: cityName }));
     navigate('/home');
@@ -86,7 +101,7 @@ function FavoritesPage() {
                     {favorite.name}
                   </Typography>
                   <Typography variant="h6" component="div" style={{ marginBottom: '12px', textAlign: 'center' }}>
-                    Current Temperature: {favorite.currentConditions?.temperature} °F
+                    Current Temperature: {convertTemperature(favorite.currentConditions?.temperature)} {temperatureUnit}
                   </Typography>
                   <Typography variant="body1" component="div" style={{ textAlign: 'center' }}>
                     Weather Conditions: {favorite.currentConditions?.weatherText || 'N/A'}

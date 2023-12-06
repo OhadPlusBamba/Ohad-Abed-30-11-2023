@@ -9,10 +9,19 @@ import { RootState } from "../../store/store";
 import CityDailyWeatherCard from "../cityDailyWeatherCard/CityDailyWeatherCard";
 
 const CityDetailedWeatherCard: React.FC = () => {
-  const { currentCityUserLookingFor, currentConditions, forecast, favorites } = useSelector(
+  const { currentCityUserLookingFor, currentConditions, forecast, favorites ,temperatureUnit} = useSelector(
     (state: RootState) => state.weather
   );
   const dispatch = useDispatch();
+  
+  if (currentConditions?.temperature=== undefined) {
+    return null;
+  }
+  function toCelsius(fahrenheit: number): number {
+    return ((fahrenheit - 32) * 5) / 9;
+  }
+
+  const convertedTemperature = temperatureUnit === 'C' ? `${toCelsius(currentConditions?.temperature).toFixed(1)}` : `${currentConditions?.temperature.toFixed(1)}`  
 
   const isFavorite = favorites.some(
     (city) => city.id === currentCityUserLookingFor.id
@@ -57,7 +66,7 @@ const CityDetailedWeatherCard: React.FC = () => {
           component="div"
           style={{ marginBottom: "36px" }}
         >
-          Current Temperature: {currentConditions?.temperature} °F
+          Current Temperature: {convertedTemperature} {temperatureUnit}
         </Typography>
         <Typography
           variant="h5"
