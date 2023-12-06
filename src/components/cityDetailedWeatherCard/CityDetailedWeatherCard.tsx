@@ -1,45 +1,33 @@
-// src/components/cityDetailedWeatherCard/CityDetailedWeatherCard.tsx
 import React from "react";
 import { Card, CardContent, Typography, Button, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import store, { RootState } from "../../store/store";
 import {
   addToFavorites,
   removeFromFavorites,
 } from "../../store/slices/weatherSlice";
+import { RootState } from "../../store/store";
 import CityDailyWeatherCard from "../cityDailyWeatherCard/CityDailyWeatherCard";
 
 const CityDetailedWeatherCard: React.FC = () => {
-  const { cityName, currentConditions, forecast, favorites } = useSelector(
+  const { currentCityUserLookingFor, currentConditions, forecast, favorites } = useSelector(
     (state: RootState) => state.weather
   );
   const dispatch = useDispatch();
 
-  console.log("Current Conditions:", currentConditions);
-  console.log("Favorites:", favorites);
-
-  const isFavorite = favorites.some((fav) => {
-    console.log("Favorite ID:", fav.id);
-    console.log("Current City Key:", currentConditions?.cityKey);
-    return fav.id === currentConditions?.cityKey;
-  });
+  const isFavorite = favorites.some(
+    (city) => city.id === currentCityUserLookingFor.id
+  );
 
   const handleToggleFavorite = () => {
-    console.log("Toggling favorite:", isFavorite);
-
     if (isFavorite) {
-      dispatch(removeFromFavorites(currentConditions?.cityKey || ""));
+      dispatch(removeFromFavorites(currentCityUserLookingFor.id));
     } else {
-      dispatch(
-        addToFavorites({
-          id: currentConditions?.cityKey || "",
-          name: cityName,
-          currentConditions: currentConditions!,
-        })
-      );
+      const newFavorite = {
+        id: currentCityUserLookingFor.id,
+        name: currentCityUserLookingFor.name,
+      };
+      dispatch(addToFavorites(newFavorite));
     }
-    console.log('Redux state after dispatch:', store.getState().weather);
-
   };
 
   return (
@@ -62,7 +50,7 @@ const CityDetailedWeatherCard: React.FC = () => {
           component="div"
           style={{ marginBottom: "36px" }}
         >
-          {cityName}
+          {currentCityUserLookingFor.name}
         </Typography>
         <Typography
           variant="h6"
@@ -80,12 +68,10 @@ const CityDetailedWeatherCard: React.FC = () => {
         </Typography>
       </CardContent>
 
-      {/* Using Grid for responsive layout */}
       <Grid container spacing={2} justifyContent="space-between">
         {forecast.DailyForecasts.map((data, index) => (
           <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
-            {/* Assuming CityDailyWeatherCard receives date prop */}
-            {/* Modify accordingly based on your CityDailyWeatherCard component */}
+         
             <CityDailyWeatherCard date={data.Date} />
           </Grid>
         ))}

@@ -1,11 +1,4 @@
-// src/store/slices/weatherSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface FavoriteCity {
-  id: string;
-  name: string;
-  currentConditions: CurrentConditions | null;
-}
 
 interface DailyForecast {
   Date: string;
@@ -25,6 +18,16 @@ interface CurrentConditions {
   weatherText: string;
 }
 
+interface Favorite {
+  id: string; 
+  name: string; 
+}
+
+interface currentCityUserLookingFor {
+  id: string; 
+  name: string; 
+}
+
 interface WeatherState {
   cityName: string;
   currentTemperature: number;
@@ -35,7 +38,8 @@ interface WeatherState {
     DailyForecasts: DailyForecast[];
   };
   currentConditions: CurrentConditions | null;
-  favorites: FavoriteCity[]; // Add favorites state
+  currentCityUserLookingFor: currentCityUserLookingFor;
+  favorites: Favorite[]; 
 }
 
 const initialState: WeatherState = {
@@ -48,6 +52,7 @@ const initialState: WeatherState = {
     DailyForecasts: [],
   },
   currentConditions: null,
+  currentCityUserLookingFor: { id: '', name: '' },
   favorites: [],
 };
 
@@ -73,25 +78,19 @@ const weatherSlice = createSlice({
     },
     addToFavorites: (
       state,
-      action: PayloadAction<{ id: string; name: string; currentConditions: CurrentConditions }>
+      action: PayloadAction<Favorite>
     ) => {
-      console.log('Adding to favorites:', action.payload);
-
-      // Check if the city is already in favorites
       const existingCity = state.favorites.find((city) => city.id === action.payload.id);
-    
+
       if (!existingCity) {
-        // Add the city to favorites
-        state.favorites.push({
-          id: action.payload.id,
-          name: action.payload.name,
-          currentConditions: action.payload.currentConditions,
-        });
+        state.favorites.push(action.payload);
       }
     },
     removeFromFavorites: (state, action: PayloadAction<string>) => {
-      // Remove the city from favorites
       state.favorites = state.favorites.filter((city) => city.id !== action.payload);
+    },
+    setCurrentCityUserLookingFor: (state, action: PayloadAction<{ id: string; name: string }>) => {
+      state.currentCityUserLookingFor = action.payload;
     },
   },
 });
@@ -102,5 +101,6 @@ export const {
   setCurrentConditions,
   addToFavorites,
   removeFromFavorites,
+  setCurrentCityUserLookingFor,
 } = weatherSlice.actions;
 export default weatherSlice.reducer;

@@ -1,11 +1,17 @@
-// Search.tsx
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { Container, InputAdornment, TextField, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Container,
+  InputAdornment,
+  TextField,
+  List,
+  ListItem,
+  ListItemText
+  
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useDispatch, useSelector } from "react-redux";
-import { setWeather } from "../../store/slices/weatherSlice";
+import { useDispatch } from "react-redux";
+import { setCurrentCityUserLookingFor, setWeather } from "../../store/slices/weatherSlice";
 import { getLocationsAutocomplete } from "../../api/api";
-import { RootState } from "../../store/store";
 
 interface Location {
   Key: string;
@@ -19,33 +25,35 @@ export default function Search() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [locations, setLocations] = useState<Location[]>([]);
   const dispatch = useDispatch();
-  const selectedCity = useSelector((state: RootState) => state.weather.cityName);
-
+ 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   const handleSelectLocation = (location: Location) => {
-    // Dispatch action to update the selected city in the Redux store
-    dispatch(setWeather({ cityName: location.LocalizedName, currentTemperature: 0 }));
-    // Clear the search term and locations
+    dispatch(
+      setWeather({
+        cityName: location.LocalizedName,
+        currentTemperature: 0,
+      })
+    );
+  
+    dispatch(setCurrentCityUserLookingFor({ id: location.Key, name: location.LocalizedName }));
+  
     setSearchTerm("");
     setLocations([]);
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
-      // Only fetch data if the search term is not empty
       if (searchTerm.trim() !== "") {
         try {
           const data = await getLocationsAutocomplete(searchTerm);
           setLocations(data);
         } catch (error) {
-          // Handle error
           console.error("Error fetching locations:", (error as Error).message);
         }
       } else {
-        // Clear locations if the search term is empty
         setLocations([]);
       }
     };
@@ -59,6 +67,7 @@ export default function Search() {
       sx={{
         py: 10,
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -69,7 +78,10 @@ export default function Search() {
         label="Search"
         value={searchTerm}
         onChange={handleChange}
-        sx={{ width: "100%", maxWidth: 600 }}
+        sx={{
+          width: "100%",
+          maxWidth: 600,
+        }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -78,10 +90,23 @@ export default function Search() {
           ),
         }}
       />
-      {/* Display the autocomplete results using List and ListItem */}
-      <List>
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 600,
+          zIndex: 999,
+          position: "absolute",
+          top: "30%",
+          background: "white",
+        }}
+      >
         {locations.map((location) => (
-          <ListItem key={location.Key} button onClick={() => handleSelectLocation(location)}>
+          <ListItem
+            key={location.Key}
+            button
+            onClick={() => handleSelectLocation(location)}
+            sx={{ background: "#8cb1d5" }}
+          >
             <ListItemText
               primary={`${location.LocalizedName}, ${location.Country.LocalizedName}`}
             />

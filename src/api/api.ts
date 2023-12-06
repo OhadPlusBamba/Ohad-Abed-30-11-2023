@@ -1,5 +1,6 @@
-//  const API_KEY = "4TiECVBU44ynCiG0fnqT2wTFBdEJnTIf";
+// const API_KEY = "4TiECVBU44ynCiG0fnqT2wTFBdEJnTIf";
 // const API_KEY = "zIZ39GdLniX9GdtH05VNrGAKSU98l34j"; //secound user api
+const API_KEY = "0bGC9rL62uQoSSw8RriH8Q90MGl5RpvA"; //10minuts api key
 
 export const getLocationsAutocomplete = async (searchTerm: string) => {
   try {
@@ -11,12 +12,10 @@ export const getLocationsAutocomplete = async (searchTerm: string) => {
       const data = await response.json();
       return data;
     } else {
-      // Handle error
       console.error("Error fetching locations:", response.statusText);
       throw new Error("Error fetching locations");
     }
   } catch (error) {
-    // Handle network error
     console.error("Network error:", (error as Error).message);
     throw new Error("Network error");
   }
@@ -32,12 +31,10 @@ export const get5DayForecast = async (locationKey: string) => {
         const data = await response.json();
         return data;
       } else {
-        // Handle error
         console.error("Error fetching 5-day forecast:", response.statusText);
         throw new Error("Error fetching 5-day forecast");
       }
     } catch (error) {
-      // Handle network error
       console.error("Network error:", (error as Error).message);
       throw new Error("Network error");
     }
@@ -53,12 +50,10 @@ export const get5DayForecast = async (locationKey: string) => {
         const data = await response.json();
         return data;
       } else {
-        // Handle error
         console.error("Error fetching current conditions:", response.statusText);
         throw new Error("Error fetching current conditions");
       }
     } catch (error) {
-      // Handle network error
       console.error("Network error:", (error as Error).message);
       throw new Error("Network error");
     }
