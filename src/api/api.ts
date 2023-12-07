@@ -1,4 +1,5 @@
-const API_KEY = "zIZ39GdLniX9GdtH05VNrGAKSU98l34j";
+// const API_KEY = "zIZ39GdLniX9GdtH05VNrGAKSU98l34j";
+const API_KEY = "kARPO1kIsVVE6182FIS5wQOy7SGzCEtB";
 
 export const getLocationsAutocomplete = async (searchTerm: string) => {
   try {
