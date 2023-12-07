@@ -4,7 +4,7 @@ const API_KEY = "kARPO1kIsVVE6182FIS5wQOy7SGzCEtB";
 export const getLocationsAutocomplete = async (searchTerm: string) => {
   try {
     const response = await fetch(
-      `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?q=${searchTerm}&apikey=${API_KEY}`
+      `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?q=${searchTerm}&apikey=${API_KEY}`
     );
 
     if (response.ok) {
@@ -23,7 +23,7 @@ export const getLocationsAutocomplete = async (searchTerm: string) => {
 export const get5DayForecast = async (locationKey: string) => {
     try {
       const response = await fetch(
-        `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${API_KEY}`
+        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${API_KEY}`
       );
   
       if (response.ok) {
@@ -42,7 +42,7 @@ export const get5DayForecast = async (locationKey: string) => {
   export const getCurrentConditions = async (locationKey: string) => {
     try {
       const response = await fetch(
-        `http://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${API_KEY}`
+        `https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${API_KEY}`
       );
   
       if (response.ok) {
