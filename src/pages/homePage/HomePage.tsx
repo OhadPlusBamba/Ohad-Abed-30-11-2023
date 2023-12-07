@@ -20,7 +20,6 @@ function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("currentCityUserLookingFor", currentCityUserLookingFor);
         if (!currentCityUserLookingFor.id) {
           const defaultCityKey = "215854";
 

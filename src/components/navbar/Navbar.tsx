@@ -33,8 +33,7 @@ function Navbar() {
   };
 
   const handleHomeClick = () => {
-    console.log("handleHomeClick triggered");
-    console.log("Updating currentCityUserLookingFor to Tel Aviv");
+
     dispatch(setCurrentCityUserLookingFor({ id: "215854", name: "Tel Aviv" }));
     navigate("/home");
   };
