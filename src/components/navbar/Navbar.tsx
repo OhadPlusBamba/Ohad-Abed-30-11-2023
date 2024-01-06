@@ -22,8 +22,8 @@ function Navbar() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const temperatureUnit = useSelector(
-    (state: RootState) => state.weather.temperatureUnit
+    const temperatureUnit = useSelector(
+      (state: RootState) => state.weather.temperatureUnit
   );
 
   const handleToggleUnit = () => {

@@ -9,6 +9,7 @@ function Layout() {
       <Navbar />
       <Routes>
         <Route path="/Home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/Favorites" element={<FavoritesPage />} />
       </Routes>
     </div>

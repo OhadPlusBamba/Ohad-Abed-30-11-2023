@@ -35,6 +35,7 @@ function HomePage() {
           );
 
           const defaultCityData = await get5DayForecast(defaultCityKey);
+
           dispatch(
             setForecast({ cityKey: defaultCityKey, ...defaultCityData })
           );

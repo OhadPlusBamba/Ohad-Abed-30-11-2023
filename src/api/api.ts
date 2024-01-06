@@ -22,6 +22,7 @@ export const getLocationsAutocomplete = async (searchTerm: string) => {
 
 export const get5DayForecast = async (locationKey: string) => {
     try {
+
       const response = await fetch(
         `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${API_KEY}`
       );
